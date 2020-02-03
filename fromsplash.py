@@ -36,6 +36,7 @@ https://web.archive.org/web/20200203205934/https://source.codeaurora.org/quic/la
 """
 
 import struct
+from PIL import Image, ImageDraw
 
 with open('splash', 'rb') as fl:
     data = fl.read()
@@ -47,3 +48,29 @@ if data[:0x8] != b'SPLASH!!':
 magic, width, height, itype, blocks, offset = struct.unpack("<8s5I", data[:28])
 
 print("magic: ", magic, "; width: ", width, "; height: ", height, "; type: ", itype, "; blocks: ", blocks, "; offset: ", offset)
+
+pos = 0x200 + offset
+x = 0
+y = 0
+
+img = Image.new( 'RGB', (width,height), "black") # create a new black image
+pixels = img.load() # create the pixel map
+
+while y < height:
+    run = data[pos]
+    repeat_run = (run & 0x80)
+    runlen = (run & 0x7f) + 1
+    pos += 1
+    for runpos in range(0, runlen):
+        pixels[x,y] = (data[pos], data[pos+1], data[pos+2])
+        if x < width:
+            x += 1
+        if not repeat_run:
+            pos += 3
+    if repeat_run:
+        pos += 3
+    if x >= width:
+        y += 1
+        x = 0
+
+img.save("splash.png")
