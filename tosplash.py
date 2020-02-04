@@ -28,10 +28,14 @@
 
 import struct
 import math
+import sys
 from PIL import Image
 
+image_name="splash.png"
+if len(sys.argv) > 1:
+    image_name=sys.argv[1]
 
-im = Image.open('splash.png')
+im = Image.open(image_name)
 pixels = im.load()
 width, height = im.size
 magic = b'SPLASH!!'
@@ -40,7 +44,7 @@ blocks = 0
 offset = 0
 
 size = 11534336 #11MiB
-with open('splash', 'wb') as fl:
+with open(image_name.replace('.png','.img'), 'wb') as fl:
     # fill with zeros
     fl.seek(size-1)
     fl.write(bytearray(1))
