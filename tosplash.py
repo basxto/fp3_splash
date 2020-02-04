@@ -52,13 +52,13 @@ with open('splash', 'wb') as fl:
         reps = 0
         for x in range(1, width):
             if reps == 127 or pixels[x,y][0] != last[0] or pixels[x,y][1] != last[1] or pixels[x,y][2] != last[2]:
-                fl.write(bytearray([reps | 0x80, last[0], last[1], last[2]]))
+                fl.write(bytearray([reps | 0x80, last[2], last[1], last[0]]))
                 blocks += 4
                 last = pixels[x,y]
                 reps = 0
             else:
                 reps += 1
-        fl.write(bytearray([reps | 0x80, last[0], last[1], last[2]]))
+        fl.write(bytearray([reps | 0x80, last[2], last[1], last[0]]))
         blocks += 4
     blocks = math.ceil(blocks/512)
     # write header to beginning

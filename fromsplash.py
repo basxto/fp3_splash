@@ -62,7 +62,7 @@ while y < height:
     runlen = (run & 0x7f) + 1
     pos += 1
     for runpos in range(0, runlen):
-        pixels[x,y] = (data[pos], data[pos+1], data[pos+2])
+        pixels[x,y] = (data[pos+2], data[pos+1], data[pos])
         if x < width:
             x += 1
         if not repeat_run:
