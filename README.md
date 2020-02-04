@@ -10,4 +10,6 @@ Usage:
 ```
 ./fromsplash.py # splash -> splash.png
 ./tosplash.py # splash.png -> splash
+./fromsplash.py {anyname}.img # {anyname}.img -> {anyname}.png
+./tosplash.py {anyname}.png # {anyname}.png -> {anyname}.img
 ```

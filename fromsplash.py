@@ -36,9 +36,14 @@ https://web.archive.org/web/20200203205934/https://source.codeaurora.org/quic/la
 """
 
 import struct
+import sys
 from PIL import Image
 
-with open('splash', 'rb') as fl:
+image_name="splash"
+if len(sys.argv) > 1:
+    image_name=sys.argv[1]
+
+with open(image_name, 'rb') as fl:
     data = fl.read()
 
 if data[:0x8] != b'SPLASH!!':
@@ -73,4 +78,4 @@ while y < height:
         y += 1
         x = 0
 
-img.save("splash.png")
+img.save(image_name.replace('.img','') + ".png")
