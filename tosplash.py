@@ -27,6 +27,7 @@
 """
 
 import struct
+import math
 from PIL import Image
 
 
@@ -35,19 +36,14 @@ pixels = im.load()
 width, height = im.size
 magic = b'SPLASH!!'
 itype = 1 # 1 since we compress
-blocks = 42 # ??
+blocks = 0
 offset = 0
-
-header = struct.pack("<8s5I", magic, width, height, itype, blocks, offset)
 
 size = 11534336 #11MiB
 with open('splash', 'wb') as fl:
     # fill with zeros
     fl.seek(size-1)
     fl.write(bytearray(1))
-    # write header to beginning
-    fl.seek(0)
-    fl.write(header)
     # write image
     fl.seek(0x200)
     for y in range(0, height):
@@ -57,10 +53,17 @@ with open('splash', 'wb') as fl:
         for x in range(1, width):
             if reps == 127 or pixels[x,y][0] != last[0] or pixels[x,y][1] != last[1] or pixels[x,y][2] != last[2]:
                 fl.write(bytearray([reps | 0x80, last[0], last[1], last[2]]))
+                blocks += 4
                 last = pixels[x,y]
                 reps = 0
             else:
                 reps += 1
         fl.write(bytearray([reps | 0x80, last[0], last[1], last[2]]))
+        blocks += 4
+    blocks = math.ceil(blocks/512)
+    # write header to beginning
+    header = struct.pack("<8s5I", magic, width, height, itype, blocks, offset)
+    fl.seek(0)
+    fl.write(header)
 
-
+print("Blocks:", blocks)
