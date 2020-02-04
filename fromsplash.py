@@ -36,7 +36,7 @@ https://web.archive.org/web/20200203205934/https://source.codeaurora.org/quic/la
 """
 
 import struct
-from PIL import Image, ImageDraw
+from PIL import Image
 
 with open('splash', 'rb') as fl:
     data = fl.read()
