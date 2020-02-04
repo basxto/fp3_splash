@@ -44,7 +44,7 @@ blocks = 0
 offset = 0
 
 size = 11534336 #11MiB
-with open(image_name.replace('.png','.img'), 'wb') as fl:
+with open('.'.join(image_name.split('.')[:-1]) + '.img', 'wb') as fl:
     # fill with zeros
     fl.seek(size-1)
     fl.write(bytearray(1))
